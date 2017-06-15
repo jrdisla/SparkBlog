@@ -23,7 +23,7 @@ public class ArticuloDao {
     public void createtables ()
     {
 
-        String sql="CREATE TABLE IF NOT EXISTS articulos(id LONG PRIMARY KEY, titulo VARCHAR (1000),cuerpo VARCHAR (5000),username VARCHAR (50) REFERENCES usuarios(username),fecha VARCHAR(50),contenido VARCHAR(500000));";
+        String sql="CREATE TABLE IF NOT EXISTS articulos(id LONG PRIMARY KEY, titulo VARCHAR (1000),cuerpo VARCHAR (5000),username VARCHAR (50) REFERENCES usuarios(username),fecha VARCHAR(50),contenido VARCHAR(500000), tag VARCHAR(500));";
 
         try(Connection con = sql2o.open()){
             con.createQuery(sql).executeUpdate();
@@ -46,7 +46,7 @@ public class ArticuloDao {
        }
 
 
-        String sql = "insert into articulos (id,titulo,cuerpo,username,fecha,contenido) values(:id,:titulo,:cuerpo,:username,:fecha,:contenido)";
+        String sql = "insert into articulos (id,titulo,cuerpo,username,fecha,contenido,tag) values(:id,:titulo,:cuerpo,:username,:fecha,:contenido,:tag)";
         try (Connection con = sql2o.open()) {
 
             con.createQuery(sql)
@@ -57,6 +57,7 @@ public class ArticuloDao {
                     .addParameter("username",articulo.getAutor())
                     .addParameter("fecha",articulo.getFecha())
                     .addParameter("contenido",contenido)
+                    .addParameter("tag",articulo.getTag())
                     .executeUpdate();
         }
     }

@@ -29,19 +29,19 @@ public class Main {
         ArrayList<Tag> tags = new ArrayList<>();
         ArrayList<Comentario> comentarios = new ArrayList<>();
 
-        Articulo articulo = new Articulo(1, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
-        Articulo articulo1 = new Articulo(2, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
-        Articulo articulo2 = new Articulo(3, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
-        Articulo articulo3 = new Articulo(4, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
-        Articulo articulo4 = new Articulo(5, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
+      //  Articulo articulo = new Articulo(1, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
+     //   Articulo articulo1 = new Articulo(2, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
+      //  Articulo articulo2 = new Articulo(3, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
+     //   Articulo articulo3 = new Articulo(4, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
+     //   Articulo articulo4 = new Articulo(5, "Hola", "Si", usuario.getUsername(),"02", comentarios,tags);
 
-        Comentario comentario = new Comentario(1, "hola que tal", usuario, articulo);
+    //    Comentario comentario = new Comentario(1, "hola que tal", usuario, articulo);
 
-       comentarios.add(comentario);
+      // comentarios.add(comentario);
 
-       tags.add(tag);
+     //  tags.add(tag);
 
-  //    usuarioDao.inserIntoUsers(usuario);
+      usuarioDao.inserIntoUsers(usuario);
  //     tagDao.inserIntoTags(tag);
  //      articuloDao.inserIntoArticulos(articulo);
  //      articuloDao.inserIntoArticulos(articulo1);

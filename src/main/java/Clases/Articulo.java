@@ -12,14 +12,14 @@ public class Articulo {
     private String username;
     private String fecha;
     private ArrayList<Comentario> comment;
-    private ArrayList<Tag> tag;
+    private String tag;
 
     public Articulo() {
 
 
     }
 
-    public Articulo(long id, String titulo, String cuerpo, String autor, String fecha, ArrayList<Comentario> comment, ArrayList<Tag> tag) {
+    public Articulo(long id, String titulo, String cuerpo, String autor, String fecha, ArrayList<Comentario> comment, String tag) {
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -78,11 +78,11 @@ public class Articulo {
         this.comment = comment;
     }
 
-    public ArrayList<Tag> getTag() {
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(ArrayList<Tag> tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 

@@ -243,7 +243,6 @@ public class ManejadorTemp {
             ArrayList<Comentario> comentarios = new ArrayList<>();
             ArrayList<Tag> tags = new ArrayList<>();
 
-            comentarios.add(null);
 
 
             String titulo = request.queryParams("titulo");
@@ -255,13 +254,13 @@ public class ManejadorTemp {
             List<Tag> allTags = tagDao.getAllTags();
             long id_tag = allTags.size();
 
-            for (String item: result
-                 ) {
+
                 id_tag +=1;
-                Tag tagp = new Tag(id_tag,item);
+                Tag tagp = new Tag(id_tag,tags_);
                 tagDao.inserIntoTags(tagp);
                 tags.add(tagp);
-            }
+
+          //  Comentario comment = new Comentario();
 
             Calendar fechaaq = new GregorianCalendar();
             int año = fechaaq.get(Calendar.YEAR);
@@ -271,8 +270,8 @@ public class ManejadorTemp {
 
            ids +=1;
 
-//           Articulo articulo = new Articulo(ids,titulo,cuerpo,user.getUsername(),fecha,comentarios,tags);
- //          articuloDao.inserIntoArticulos(articulo);
+          Articulo articulo = new Articulo(ids,titulo,cuerpo,user.getUsername(),fecha,comentarios,tags_);
+          articuloDao.inserIntoArticulos(articulo);
             String html = automaticHtmlCode(articuloDao.getAllArticulos());
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("Titulo", "Start Page");
@@ -287,8 +286,9 @@ public class ManejadorTemp {
         String titulo = "";
         String userName = "";
         String cuerpo = "";
-
+        String result = "";
         for (Articulo item: articulos) {
+
             titulo = item.getTitulo();
             userName = item.getAutor();
             cuerpo = item.getCuerpo();
@@ -296,8 +296,10 @@ public class ManejadorTemp {
                     "<hr>" + "\n\t\t" +
                     "<h2>" + titulo + "</h2>" + "\n\t\t" +
                     "<h5><span class=\"glyphicon glyphicon-time\"></span> Posted by: "+ userName + "</h5>" + "\n\t\t" +
+                    "<h5><span class=\"glyphicon glyphicon-time\"></span>"+ item.getFecha() + "</h5>" + "\n\t\t" +
+                    "<h5><span class=\"glyphicon glyphicon-time\"></span>"+ item.getTag() + "</h5>" + "\n\t\t" +
                     "<h5 onclick=\"document.location = '/listArti/" + item.getId() + "/';\"><span class=\"label label-danger\">" + titulo + "</h5><br>" + "\n\t\t" +
-                    "<p>" + cuerpo + "</p>" + "\n\t\t\t" +
+                    "<p>" + cuerpo.substring(0,70) + "</p>" + "\n\t\t\t" +
                     " <br><br>\n\t    ";
 
         }
