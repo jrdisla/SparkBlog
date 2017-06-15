@@ -41,8 +41,8 @@ public class CommentDao {
             con.createQuery(sql)
                     .addParameter("id", comment.getId())
                     .addParameter("comment", comment.getComment())
-                    .addParameter("Usuario",comment.getAutor().getUsername())
-                    .addParameter("Articulo",comment.getArticulo().getId())
+                    .addParameter("Usuario",comment.getAutor())
+                    .addParameter("Articulo",comment.getArticulo())
                     .executeUpdate();
         }
     }

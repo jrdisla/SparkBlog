@@ -41,7 +41,7 @@ public class Main {
 
      //  tags.add(tag);
 
-      usuarioDao.inserIntoUsers(usuario);
+     // usuarioDao.inserIntoUsers(usuario);
  //     tagDao.inserIntoTags(tag);
  //      articuloDao.inserIntoArticulos(articulo);
  //      articuloDao.inserIntoArticulos(articulo1);

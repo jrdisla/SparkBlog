@@ -6,8 +6,8 @@ package Clases;
 public class Comentario {
     private long id;
     private String comment;
-    private Usuario autor;
-    private Articulo articulo;
+    private String Usuario;
+    private long articulo;
 
     public long getId() {
         return id;
@@ -25,27 +25,27 @@ public class Comentario {
         this.comment = comment;
     }
 
-    public Usuario getAutor() {
-        return autor;
+    public String getAutor() {
+        return Usuario;
     }
 
-    public void setAutor(Usuario autor) {
-        this.autor = autor;
+    public void setAutor(String autor) {
+        this.Usuario= autor;
     }
 
-    public Articulo getArticulo() {
+    public long getArticulo() {
         return articulo;
     }
 
-    public void setArticulo(Articulo articulo) {
+    public void setArticulo(long articulo) {
         this.articulo = articulo;
     }
 
-    public Comentario(long id, String comment, Usuario autor, Articulo articulo) {
+    public Comentario(long id, String comment,String autor, long articulo) {
 
         this.id = id;
         this.comment = comment;
-        this.autor = autor;
+        this.Usuario= autor;
         this.articulo = articulo;
     }
 

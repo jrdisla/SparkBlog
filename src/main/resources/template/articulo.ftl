@@ -41,10 +41,11 @@
         <div class="col-sm-3 sidenav">
             <h4>John's Blog</h4>
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#section1">Home</a></li>
-                <li><a href="#section2">Friends</a></li>
-                <li><a href="#section3">Family</a></li>
-                <li><a href="#section3">Photos</a></li>
+                <li><a href="/startPage/">Home</a></li>
+                <li><a href="/addUser/">Add User</a></li>
+                <li><a href="/login/">Login</a></li>
+                <li><a href="/invalidarSesion/">Logout</a></li>
+                <li><a href="/addArticulo/">Add Article</a></li>
             </ul><br>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search Blog..">
@@ -64,11 +65,13 @@
             <br><br>
             <br>
             <h4>Leave a Comment:</h4>
-            <form action="/addArticulo/added" method="post" role="form">
+            <form action="/articulo/valida" method="post" role="form">
                 <div class="form-group">
                     <textarea name="comment" class="form-control" rows="3" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-success">Submit</button>
+
+                ${code2}
             </form>
             <br><br>
         </div>

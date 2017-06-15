@@ -5,6 +5,7 @@ import Clases.Comentario;
 import Clases.Tag;
 import Clases.Usuario;
 import DataBaseManager.ArticuloDao;
+import DataBaseManager.CommentDao;
 import DataBaseManager.TagDao;
 import DataBaseManager.UsuarioDao;
 import freemarker.template.Configuration;
@@ -23,6 +24,8 @@ public class ManejadorTemp {
     ArticuloDao articuloDao = new ArticuloDao();
     UsuarioDao usuarioDao = new UsuarioDao();
     TagDao tagDao = new TagDao();
+    CommentDao commentDao = new CommentDao();
+    long actual_id = 0;
     java.util.Date date = new Date();
     public void startApp() {
 
@@ -38,6 +41,7 @@ public class ManejadorTemp {
         added(FreeMarkerengine);
         addArticule(FreeMarkerengine);
         addedArti(FreeMarkerengine);
+        validateUser(FreeMarkerengine);
     }
     /***
      * http://localhost:4567/addUser/
@@ -122,10 +126,8 @@ public class ManejadorTemp {
          * http://localhost:4567/listArti/:id/
          * @param engine
          */
-        before("/listArti/:id/*",(request, response) -> {
-            Long id = Long.parseLong(request.params(":id"));
-            Articulo articulo = getArticuloById(id);
-            Usuario usuario = getUserByUsername(articulo.getAutor());
+        before("/listArti/:id/",(request, response) -> {
+            Usuario usuario = request.session().attribute("username");
             if(usuario==null){
                 //parada del request, enviando un codigo.
                 halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
@@ -134,15 +136,14 @@ public class ManejadorTemp {
         get("/listArti/:id/", (request, response) -> {
 
             Long id = Long.parseLong(request.params(":id"));
-
             Articulo arti = getArticuloById(id);
-
-          String htmlCode =  automaticHtmlCodejustOne(arti);
-
+            actual_id = id;
+            String htmlCode =  automaticHtmlCodejustOne(arti);
+            String htmlCode2 =  automaticCommentHtmlCode(commentDao.getAllComments(),arti.getId());
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("Titulo", "Agregar Nuevo Usuario");
             attributes.put("code",htmlCode);
-
+            attributes.put("code2",htmlCode2);
             return new ModelAndView(attributes, "articulo.ftl");
         }, engine);
     }
@@ -217,9 +218,6 @@ public class ManejadorTemp {
     public void addArticule (FreeMarkerEngine engine)
     {
         get("/addArticulo/", (request, response) -> {
-         //   List<Articulo> articulaaaa;
-         //   articulaaaa = articuloDao.getAllArticulos();
-         //   String htmlCode = automaticHtmlCode(articulaaaa);
 
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("Titulo", "Adding Articule");
@@ -236,6 +234,21 @@ public class ManejadorTemp {
 
     public void addedArti (FreeMarkerEngine engine)
     {
+        before("/addArticulo/added",(request, response) -> {
+            Usuario usuario = request.session().attribute("username");
+            if(usuario==null){
+                //parada del request, enviando un codigo.
+                halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+            }
+
+        });
+
+        before("/addArticulo/added",(request, response) -> {
+                    Usuario usuario = request.session().attribute("username");
+                    if(!usuario.isAdm() && !usuario.isAutor()){
+                        //parada del request, enviando un codigo.
+                        halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+                    } });
         post("/addArticulo/added", (request, response) -> {
             List<Articulo> articulos = articuloDao.getAllArticulos();
             long ids = articulos.size();
@@ -280,14 +293,56 @@ public class ManejadorTemp {
             return new ModelAndView(attributes, "startPage.ftl");
         }, engine);
     }
+    /***
+     * http://localhost:4567/articulo/valida
+     * @param engine
+     */
+    public void validateUser (FreeMarkerEngine engine)
+    {
+        before("/articulo/valida",(request, response) -> {
+            Usuario usuario_ = request.session().attribute("username");
+            Usuario usuario = getUserByUsername(usuario_.getUsername());
+            if(usuario==null){
+                //parada del request, enviando un codigo.
+                halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+            }
+        });
+
+        post("/articulo/valida", (request, response) -> {
+
+            String comment = request.queryParams("comment");
+            long id_c = commentDao.getAllComments().size();
+
+
+            Articulo articulo = getArticuloById(actual_id);
+
+            Usuario usuario = request.session().attribute("username");
+
+            String este_user = usuario.getUsername();
+            Comentario comentario = new Comentario((id_c++), comment, este_user, articulo.getId());
+            commentDao.inserIntoTags(comentario);
+
+
+
+            List<Comentario> comentarios = commentDao.getAllComments();
+
+            String htmlCode =  automaticHtmlCodejustOne(articulo);
+            String htmlCode2 =  automaticCommentHtmlCode(commentDao.getAllComments(),actual_id);
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Agregar Nuevo Usuario");
+            attributes.put("code",htmlCode);
+            attributes.put("code2",htmlCode2);
+            return new ModelAndView(attributes, "articulo.ftl");
+        }, engine);
+    }
 
     private String automaticHtmlCode(List<Articulo> articulos) {
         String htmlCode = "";
         String titulo = "";
         String userName = "";
         String cuerpo = "";
-        String result = "";
-        for (Articulo item: articulos) {
+            for (Articulo item: articulos) {
 
             titulo = item.getTitulo();
             userName = item.getAutor();
@@ -348,5 +403,33 @@ public class ManejadorTemp {
         }
         return null;
     }
+    public Articulo getArtiByName (String titulo)
+    {
+        for (Articulo item:articuloDao.getAllArticulos()
+             ) {
+            if (item.getTitulo().equalsIgnoreCase(titulo))
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public String automaticCommentHtmlCode (List<Comentario> item, long id_arti)
+    {
+
+        String htmlCode = "";
+        for (Comentario itemp:item
+             ) {
+         if (itemp.getArticulo() == id_arti){
+             System.out.println(itemp.getAutor());
+            htmlCode += "<h4><small> Recent Post </small></h4>" + "\n\t\t" +
+                    "<hr>" + "\n\t\t" +
+                    "<h5><span class=\"glyphicon glyphicon-time\"></span> Posted by: " + itemp.getAutor() + "</h5>" + "\n\t\t" +
+                    "<p>" + itemp.getComment() + "</p>" + "\n\t\t\t" +
+                    " <br><br>\n\t    ";
+        }
+        }
+    return htmlCode;}
 }
 
