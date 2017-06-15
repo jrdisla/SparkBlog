@@ -41,20 +41,19 @@ public class Main {
 
        tags.add(tag);
 
-      usuarioDao.inserIntoUsers(usuario);
-      tagDao.inserIntoTags(tag);
-       articuloDao.inserIntoArticulos(articulo);
-       articuloDao.inserIntoArticulos(articulo1);
-        articuloDao.inserIntoArticulos(articulo2);
-        articuloDao.inserIntoArticulos(articulo3);
-        articuloDao.inserIntoArticulos(articulo4);
-     commentDao.inserIntoTags(comentario);
+  //    usuarioDao.inserIntoUsers(usuario);
+ //     tagDao.inserIntoTags(tag);
+ //      articuloDao.inserIntoArticulos(articulo);
+ //      articuloDao.inserIntoArticulos(articulo1);
+   //     articuloDao.inserIntoArticulos(articulo2);
+   //     articuloDao.inserIntoArticulos(articulo3);
+  //      articuloDao.inserIntoArticulos(articulo4);
+  //   commentDao.inserIntoTags(comentario);
 
+        Spark.staticFileLocation("/public");
+        enableDebugScreen();
 
-        //Spark.staticFileLocation("/public");
-       // enableDebugScreen();
-
-      // new ManejadorTemp().startApp();
+       new ManejadorTemp().startApp();
 
     }
 }

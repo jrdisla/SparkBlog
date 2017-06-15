@@ -41,10 +41,11 @@
                     <div class="col-sm-3 sidenav">
                         <h4>John's Blog</h4>
                         <ul class="nav nav-pills nav-stacked">
-                            <li class="active"><a href="#section1">Home</a></li>
+                            <li class="active"><a href="/startPage/">Home</a></li>
                             <li><a href="/addUser/">Add User</a></li>
                             <li><a href="/login/">Login</a></li>
                             <li><a href="/invalidarSesion/">Logout</a></li>
+                            <li><a href="/addArticulo/">Add Article</a></li>
                         </ul><br>
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search Blog..">

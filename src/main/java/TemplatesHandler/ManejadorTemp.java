@@ -35,6 +35,7 @@ public class ManejadorTemp {
         login(FreeMarkerengine);
         invalidarSession(FreeMarkerengine);
         added(FreeMarkerengine);
+        addArticule(FreeMarkerengine);
     }
     /***
      * http://localhost:4567/addUser/
@@ -205,6 +206,24 @@ public class ManejadorTemp {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("Titulo", "Start Page");
             return new ModelAndView(attributes, "login.ftl");
+        }, engine);
+    }
+    /**
+     * http://localhost:4567/addArticulo/
+     * @param engine
+     */
+    public void addArticule (FreeMarkerEngine engine)
+    {
+        get("/addArticulo/", (request, response) -> {
+         //   List<Articulo> articulaaaa;
+         //   articulaaaa = articuloDao.getAllArticulos();
+         //   String htmlCode = automaticHtmlCode(articulaaaa);
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Adding Articule");
+
+
+            return new ModelAndView(attributes, "addArticulos.ftl");
         }, engine);
     }
 
