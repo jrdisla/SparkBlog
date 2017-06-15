@@ -46,6 +46,7 @@
                             <li><a href="/login/">Login</a></li>
                             <li><a href="/invalidarSesion/">Logout</a></li>
                             <li><a href="/addArticulo/">Add Article</a></li>
+                            <li><a href="/listArtiBy/">Modify and Delete</a></li>
                         </ul><br>
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search Blog..">

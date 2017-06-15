@@ -43,11 +43,11 @@
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="/startPage/">Home</a></li>
                 <li><a href="/startPage/">Home</a></li>
-                <li class="active"><a href="/addUser/">Add User</a></li>
+                <li><a href="/addUser/">Add User</a></li>
                 <li><a href="/login/">Login</a></li>
                 <li><a href="/invalidarSesion/">Logout</a></li>
                 <li><a href="/addArticulo/">Add Article</a></li>
-                <li><a href="/listArtiBy/">Modify and Delete</a></li>
+                <li class="active"><a href="/listArtiBy/">Modify and Delete</a></li>
             </ul><br>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search Blog..">
@@ -62,20 +62,21 @@
         <div class="col-sm-9">
 
 
-            <form action="/addUser/added" method="post">
+            <form action="/individualInfo/${articulo.id?string["0"]}/" method="post" id="ac">
                 <div class="input-group" margin="auto">
-                    Username: <input name="username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                    Titulo: <input name="titulo" type="text" class="form-control" value="${articulo.titulo}" placeholder="Username" aria-describedby="basic-addon1">
                 </div>
-                <div class="input-group">
-                    Nombre: <input name="nombre" type="text" class="form-control" placeholder="Nombre " aria-describedby="basic-addon1">
-                </div>
-                <div class="input-group">
-                    Password: <input name="password" type="text" class="form-control" placeholder="Your Password" aria-describedby="basic-addon1">
-                </div>
-                <label class="checkbox-inline"><input name="adm" type="checkbox" value="true">adm</label>
-                <label class="checkbox-inline"><input name="autor" type="checkbox" value="true">autor</label>
 
-                <button type="submit" class="btn btn-primary">Agregar</button>
+                <div class="input-group" margin="auto">
+                    Tags: <input name="tags" type="text" class="form-control" value="${articulo.tag}" placeholder="Separated by comma" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Cuerpo:</label>
+                    <textarea name="comment" class="form-control" rows="5" id="ac">${articulo.cuerpo}</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Actualizar</button>
 
             </form>
 

@@ -62,41 +62,53 @@ public class ArticuloDao {
         }
     }
 
-    /* public void updateName (Usuario user)
+    public void updateTag (Articulo articulo)
     {
-        String updateSql = "update usuarios set nombre = :nombre where username = :username";
+        String updateSql = "update articulos set tag = :tag where id = :id";
 
         try (Connection con = sql2o.open()) {
-            System.out.println(user.getPassword());
             con.createQuery(updateSql)
 
-                    .addParameter("nombre", user.getNombre())
-                    .addParameter("username",user.getUsername() )
+                    .addParameter("tag",articulo.getTag())
+                    .addParameter("id",articulo.getId())
+
+                    .executeUpdate();
+        }
+    }
+     public void updateCuerpo (Articulo articulo)
+    {
+        String updateSql = "update articulos set cuerpo = :cuerpo where id = :id";
+
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateSql)
+
+                    .addParameter("cuerpo",articulo.getCuerpo())
+                    .addParameter("id",articulo.getId())
 
                     .executeUpdate();
         }
     }
 
-    public void updatePassword (Usuario user)
+    public void updateTitulo (Articulo articulo)
     {
-        String updateSql = "update usuarios set password = :password where username = :username";
+        String updateSql = "update articulos set titulo = :titulo where id = :id";
 
         try (Connection con = sql2o.open()) {
             con.createQuery(updateSql)
 
 
-                    .addParameter("password",user.getPassword())
-                    .addParameter("username",user.getUsername() )
+                    .addParameter("titulo",articulo.getTitulo())
+                    .addParameter("id",articulo.getId())
                     .executeUpdate();
         }
     }
 
-    public void deleteComment(String username) {
+    public void deleteArticulo(long id) {
         try(Connection con = sql2o.open()) {
-            String sql = "DELETE FROM usuarios WHERE username = :username;";
+            String sql = "DELETE FROM articulos WHERE id = :id;";
             con.createQuery(sql)
-                    .addParameter("username", username)
+                    .addParameter("id", id)
                     .executeUpdate();
         }
-    }*/
+    }
 }

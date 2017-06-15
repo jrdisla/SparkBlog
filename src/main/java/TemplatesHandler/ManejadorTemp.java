@@ -42,6 +42,10 @@ public class ManejadorTemp {
         addArticule(FreeMarkerengine);
         addedArti(FreeMarkerengine);
         validateUser(FreeMarkerengine);
+        listArtyby(FreeMarkerengine);
+        deleteArticulo(FreeMarkerengine);
+        updateArtit(FreeMarkerengine);
+        IndividualShow(FreeMarkerengine);
     }
     /***
      * http://localhost:4567/addUser/
@@ -78,12 +82,11 @@ public class ManejadorTemp {
             String name = request.queryParams("nombre");
             String password = request.queryParams("password");
             String adm_strin = request.queryParams("adm");
-            if(adm_strin.equalsIgnoreCase("true"))
-            {
-                adm = true;
+            if (adm_strin!=null){
+                    adm = true;
             }
             String autor_strin = request.queryParams("autor");
-            if(autor_strin.equalsIgnoreCase("true"))
+            if(autor_strin !=null)
             {
                 autor = true;
             }
@@ -255,41 +258,29 @@ public class ManejadorTemp {
             Usuario user = request.session().attribute("username");
             ArrayList<Comentario> comentarios = new ArrayList<>();
             ArrayList<Tag> tags = new ArrayList<>();
-
-
-
             String titulo = request.queryParams("titulo");
             String cuerpo = request.queryParams("comment");
             String tags_ = request.queryParams("tags");
-
           //  ArrayList<Tag> tags = new ArrayList<>();
             List<String> result = Arrays.asList(tags_.split("\\s*,\\s*"));
             List<Tag> allTags = tagDao.getAllTags();
             long id_tag = allTags.size();
-
-
-                id_tag +=1;
-                Tag tagp = new Tag(id_tag,tags_);
-                tagDao.inserIntoTags(tagp);
-                tags.add(tagp);
-
-          //  Comentario comment = new Comentario();
-
+            id_tag +=1;
+            Tag tagp = new Tag(id_tag,tags_);
+            tagDao.inserIntoTags(tagp);
+            tags.add(tagp);
             Calendar fechaaq = new GregorianCalendar();
             int año = fechaaq.get(Calendar.YEAR);
             int mes = fechaaq.get(Calendar.MONTH);
             int dia = fechaaq.get(Calendar.DAY_OF_MONTH);
             String fecha = dia + "/" + (mes+1) + "/" + año;
-
-           ids +=1;
-
-          Articulo articulo = new Articulo(ids,titulo,cuerpo,user.getUsername(),fecha,comentarios,tags_);
-          articuloDao.inserIntoArticulos(articulo);
+            ids +=1;
+            Articulo articulo = new Articulo(ids,titulo,cuerpo,user.getUsername(),fecha,comentarios,tags_);
+            articuloDao.inserIntoArticulos(articulo);
             String html = automaticHtmlCode(articuloDao.getAllArticulos());
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("Titulo", "Start Page");
             attributes.put("code",html);
-
             return new ModelAndView(attributes, "startPage.ftl");
         }, engine);
     }
@@ -309,32 +300,106 @@ public class ManejadorTemp {
         });
 
         post("/articulo/valida", (request, response) -> {
-
             String comment = request.queryParams("comment");
             long id_c = commentDao.getAllComments().size();
-
-
             Articulo articulo = getArticuloById(actual_id);
-
             Usuario usuario = request.session().attribute("username");
-
             String este_user = usuario.getUsername();
             Comentario comentario = new Comentario((id_c++), comment, este_user, articulo.getId());
             commentDao.inserIntoTags(comentario);
-
-
-
             List<Comentario> comentarios = commentDao.getAllComments();
-
             String htmlCode =  automaticHtmlCodejustOne(articulo);
             String htmlCode2 =  automaticCommentHtmlCode(commentDao.getAllComments(),actual_id);
-
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("Titulo", "Agregar Nuevo Usuario");
             attributes.put("code",htmlCode);
             attributes.put("code2",htmlCode2);
             return new ModelAndView(attributes, "articulo.ftl");
         }, engine);
+    }
+
+    public void listArtyby (FreeMarkerEngine engine)
+    {
+        get("/listArtiBy/", (request, response) -> {
+            Usuario user_arti = request.session().attribute("username");
+            List<Articulo> articulos = articuloDao.getAllArticulos();
+            String html="";
+            List<Articulo> list_aux= new ArrayList<>();
+            if(!user_arti.isAdm()){
+            for (Articulo item:articulos
+                 ){
+                       if(item.getAutor().equalsIgnoreCase(user_arti.getUsername()))
+                       {
+                           list_aux.add(item);
+                       }
+            }
+            html = automaticHtmlCodeForTable(list_aux);}
+            else
+            {
+                html = automaticHtmlCodeForTable(articulos);
+            }
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Adding Articule");
+            attributes.put("code", html);
+            return new ModelAndView(attributes, "listArtiByUser.ftl");
+        }, engine);
+    }
+    public void deleteArticulo(FreeMarkerEngine engine) {
+        get("/deleteArticulo/:id/", (request, response) -> {
+            long ID = Long.parseLong(request.params(":id"));
+            actual_id--;
+            articuloDao.deleteArticulo(ID);
+            response.redirect("/listArtiBy/");
+            return "";
+        });
+    }
+
+    /***
+     *
+     * http://localhost:4567/actStudent/
+     * @param FreeMarkerengine
+     */
+    public void updateArtit(FreeMarkerEngine FreeMarkerengine) {
+        get("/actArticulo/:id/", (request, response) -> {
+            Articulo articulo = getArticuloById(Long.parseLong(request.params(":id")));
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Actualizando Articulo");
+            attributes.put("articulo", articulo);
+            return new ModelAndView(attributes, "updateArti.ftl");
+        }, FreeMarkerengine);
+    }
+    /***
+     * http://localhost:4567/individualInfo/
+     * @param FreeMarkerengine
+     */
+    public void IndividualShow(FreeMarkerEngine FreeMarkerengine) {
+        get("/individualInfo/:id/", (request, response) -> {
+            Articulo articulo = getArticuloById(Long.parseLong(request.params(":id")));
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Información de Articulo");
+            attributes.put("articulo", articulo);
+            return new ModelAndView(attributes, "infoArticulo.ftl");
+        }, FreeMarkerengine);
+
+        post("/individualInfo/:id/", (request, response) -> {
+
+            Articulo articulo = getArticuloById(Long.parseLong(request.params("id")));
+
+            articulo.setCuerpo(request.queryParams("comment"));
+            articulo.setTitulo(request.queryParams("titulo"));
+            articulo.setTag(request.queryParams("tags"));
+
+            System.out.println(articulo.getTag());
+
+            articuloDao.updateTitulo(articulo);
+            articuloDao.updateTag(articulo);
+            articuloDao.updateCuerpo(articulo);
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Información de articulo");
+            attributes.put("articulo", articulo);
+            return new ModelAndView(attributes, "infoArticulo.ftl");
+        }, FreeMarkerengine);
     }
 
     private String automaticHtmlCode(List<Articulo> articulos) {
@@ -431,5 +496,25 @@ public class ManejadorTemp {
         }
         }
     return htmlCode;}
+
+    private String automaticHtmlCodeForTable(List<Articulo> articulos) {
+        String htmlCode = "";
+        for (Articulo item : articulos) {
+            htmlCode += "<tr onclick=\"document.location = '/individualInfo/" + item.getId() + "/';\">" + "\n\t\t" +
+                    "<td>" + item .getTitulo() + "</td>" + "\n\t\t" +
+                    "<td>" + item .getAutor() + "</td>" + "\n\t\t" +
+                    "<td>" + item .getFecha() + "</td>" + "\n\t\t" +
+                    "<td>" + "\n\t\t\t" +
+                    "<a href=\"/actArticulo/" + item .getId() + "/\" class=\"btn btn-warning\"  role=\"button\">Actualizar</a>" + "\n\t\t\t" +
+                    "<a href=\"/deleteArticulo/" + item .getId() + "/\"class=\"btn btn-danger\"  role=\"button\">Eliminar</a>" + "\n\t\t\t" +
+                    "</td>" + "\n\t    " +
+                    "</tr>\n\t";
+        }
+
+        return htmlCode;
+    }
+
+
 }
+
 

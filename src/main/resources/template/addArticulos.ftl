@@ -46,6 +46,7 @@
                 <li><a href="/login/">Login</a></li>
                 <li><a href="/invalidarSesion/">Logout</a></li>
                 <li class="active"><a href="/addArticulo/">Add Article</a></li>
+                <li><a href="/listArtiBy/">Modify and Delete</a></li>
             </ul><br>
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search Blog..">
@@ -64,7 +65,7 @@
 
                 <form action="/addArticulo/added" method="post" id="ac">
                     <div class="input-group" margin="auto">
-                        Titulo: <input name="titulo" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                        Titulo: <input name="titulo" type="text" class="form-control" placeholder="Titulo" aria-describedby="basic-addon1">
                     </div>
 
                     <div class="input-group" margin="auto">
