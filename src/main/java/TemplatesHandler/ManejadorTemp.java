@@ -1,18 +1,18 @@
 package TemplatesHandler;
 
 import Clases.Articulo;
+import Clases.Comentario;
+import Clases.Tag;
 import Clases.Usuario;
 import DataBaseManager.ArticuloDao;
+import DataBaseManager.TagDao;
 import DataBaseManager.UsuarioDao;
 import freemarker.template.Configuration;
 import spark.ModelAndView;
 import spark.Session;
 import spark.template.freemarker.FreeMarkerEngine;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Calendar;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -22,7 +22,8 @@ import static spark.Spark.*;
 public class ManejadorTemp {
     ArticuloDao articuloDao = new ArticuloDao();
     UsuarioDao usuarioDao = new UsuarioDao();
-
+    TagDao tagDao = new TagDao();
+    java.util.Date date = new Date();
     public void startApp() {
 
         Configuration configuration= new Configuration(Configuration.VERSION_2_3_26);
@@ -36,6 +37,7 @@ public class ManejadorTemp {
         invalidarSession(FreeMarkerengine);
         added(FreeMarkerengine);
         addArticule(FreeMarkerengine);
+        addedArti(FreeMarkerengine);
     }
     /***
      * http://localhost:4567/addUser/
@@ -224,6 +226,59 @@ public class ManejadorTemp {
 
 
             return new ModelAndView(attributes, "addArticulos.ftl");
+        }, engine);
+    }
+
+    /***
+     * http://localhost:4567/addArticulo/added
+     * @param engine
+     */
+
+    public void addedArti (FreeMarkerEngine engine)
+    {
+        post("/addArticulo/added", (request, response) -> {
+            List<Articulo> articulos = articuloDao.getAllArticulos();
+            long ids = articulos.size();
+            Usuario user = request.session().attribute("username");
+            ArrayList<Comentario> comentarios = new ArrayList<>();
+            ArrayList<Tag> tags = new ArrayList<>();
+
+            comentarios.add(null);
+
+
+            String titulo = request.queryParams("titulo");
+            String cuerpo = request.queryParams("comment");
+            String tags_ = request.queryParams("tags");
+
+          //  ArrayList<Tag> tags = new ArrayList<>();
+            List<String> result = Arrays.asList(tags_.split("\\s*,\\s*"));
+            List<Tag> allTags = tagDao.getAllTags();
+            long id_tag = allTags.size();
+
+            for (String item: result
+                 ) {
+                id_tag +=1;
+                Tag tagp = new Tag(id_tag,item);
+                tagDao.inserIntoTags(tagp);
+                tags.add(tagp);
+            }
+
+            Calendar fechaaq = new GregorianCalendar();
+            int año = fechaaq.get(Calendar.YEAR);
+            int mes = fechaaq.get(Calendar.MONTH);
+            int dia = fechaaq.get(Calendar.DAY_OF_MONTH);
+            String fecha = dia + "/" + (mes+1) + "/" + año;
+
+           ids +=1;
+
+//           Articulo articulo = new Articulo(ids,titulo,cuerpo,user.getUsername(),fecha,comentarios,tags);
+ //          articuloDao.inserIntoArticulos(articulo);
+            String html = automaticHtmlCode(articuloDao.getAllArticulos());
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Start Page");
+            attributes.put("code",html);
+
+            return new ModelAndView(attributes, "startPage.ftl");
         }, engine);
     }
 

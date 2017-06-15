@@ -62,14 +62,18 @@
 
             <div class="panel-body">
 
-                <form action="/addUser/added" method="post">
+                <form action="/addArticulo/added" method="post" id="ac">
                     <div class="input-group" margin="auto">
-                        Titulo: <input name="username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                        Titulo: <input name="titulo" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                    </div>
+
+                    <div class="input-group" margin="auto">
+                        Tags: <input name="tags" type="text" class="form-control" placeholder="Separated by comma" aria-describedby="basic-addon1">
                     </div>
 
                     <div class="form-group">
                         <label for="comment">Cuerpo:</label>
-                        <textarea class="form-control" rows="5" id="comment"></textarea>
+                        <textarea name="comment" class="form-control" rows="5" id="ac"></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Agregar</button>
