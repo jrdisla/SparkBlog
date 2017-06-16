@@ -39,7 +39,7 @@
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-3 sidenav">
-            <h4>John's Blog</h4>
+            <h4>Spark Blog</h4>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="/startPage/">Home</a></li>
                 <li><a href="/startPage/">Home</a></li>

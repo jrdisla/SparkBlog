@@ -15,7 +15,7 @@
     <div class="panel-body">
         <ul class="nav nav-tabs">
             <li class="active"><a href="/addUsers/">Add User</a></li>
-            <li><a href="/startPage/">Articulos</a></li>
+            <li><a href="/signup/">Sing up</a></li>
 
         </ul>
         <form action="/login/logged" method="post">
@@ -23,7 +23,7 @@
                 Username: <input name="username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
             </div>
             <div class="input-group">
-                Password: <input name="password" type="text" class="form-control" placeholder="Your Password" aria-describedby="basic-addon1">
+                Password: <input name="password" type="password" class="form-control" placeholder="Your Password" aria-describedby="basic-addon1">
             </div>
             <p>
 

@@ -39,7 +39,7 @@
 <div class="container-fluid">
     <div class="row content">
         <div class="col-sm-3 sidenav">
-            <h4>John's Blog</h4>
+            <h4>Spark Blog</h4>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="/startPage/">Home</a></li>
                 <li><a href="/startPage/">Home</a></li>
@@ -70,7 +70,7 @@
                     Nombre: <input name="nombre" type="text" class="form-control" placeholder="Nombre " aria-describedby="basic-addon1">
                 </div>
                 <div class="input-group">
-                    Password: <input name="password" type="text" class="form-control" placeholder="Your Password" aria-describedby="basic-addon1">
+                    Password: <input name="password" type="password" class="form-control" placeholder="Your Password" aria-describedby="basic-addon1">
                 </div>
                 <label class="checkbox-inline"><input name="adm" type="checkbox" value="true">adm</label>
                 <label class="checkbox-inline"><input name="autor" type="checkbox" value="true">autor</label>

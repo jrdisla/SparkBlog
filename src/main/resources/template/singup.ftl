@@ -42,7 +42,8 @@
             <h4>Spark Blog</h4>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="/startPage/">Home</a></li>
-                <li><a href="/addUser/">Add User</a></li>
+                <li><a href="/startPage/">Home</a></li>
+                <li class="active"><a href="/addUser/">Add User</a></li>
                 <li><a href="/login/">Login</a></li>
                 <li><a href="/invalidarSesion/">Logout</a></li>
                 <li><a href="/addArticulo/">Add Article</a></li>
@@ -60,21 +61,23 @@
 
         <div class="col-sm-9">
 
+            <form action="/addUser/normal" method="post">
+                <div class="input-group" margin="auto">
+                    Username: <input name="username" type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group">
+                    Nombre: <input name="nombre" type="text" class="form-control" placeholder="Nombre " aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group">
+                    Password: <input name="password" type="password" class="form-control" placeholder="Your Password" aria-describedby="basic-addon1">
+                </div>
 
-        ${code}
+                <button type="submit" class="btn btn-primary">Agregar</button>
+
+            </form>
 
             <br><br>
             <br>
-            <h4>Leave a Comment:</h4>
-            <form action="/articulo/valida" method="post" role="form">
-                <div class="form-group">
-                    <textarea name="comment" class="form-control" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-success">Submit</button>
-
-                ${code2}
-            </form>
-            <br><br>
         </div>
     </div>
 </div>

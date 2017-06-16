@@ -14,7 +14,7 @@ public class TagDao {
     private Sql2o sql2o;
 
     public TagDao() {
-        this.sql2o = new Sql2o("jdbc:h2:~/test","sa","");
+        this.sql2o = new Sql2o("jdbc:h2:~/test7","sa","");
         createtables();
     }
     public void createtables ()

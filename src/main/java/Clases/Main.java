@@ -19,9 +19,10 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 public class Main {
     public static void main(String[] args) {
 
-        Preferences user_pre = Preferences.userRoot();
-        Boolean isFirstRun = user_pre.getBoolean("first_run", true);
-        System.out.println(isFirstRun);
+
+        Preferences userPrefs = Preferences.userRoot();
+        Boolean isFirstRun = userPrefs.getBoolean("first_run", true);
+
         if (isFirstRun) {
             System.out.println("running for the first time");
             UsuarioDao usuarioDao = new UsuarioDao();
@@ -30,15 +31,14 @@ public class Main {
             CommentDao commentDao = new CommentDao();
             Usuario usuario = new Usuario("admin", "admin", "admin", true, true);
             usuarioDao.inserIntoUsers(usuario);
-            user_pre.putBoolean("first_run", false);
+            userPrefs.putBoolean("first_run", false);
         }
+
+
+
         Spark.staticFileLocation("/public");
         enableDebugScreen();
         new ManejadorTemp().startApp();
-
-
-
-
 
     }
 }

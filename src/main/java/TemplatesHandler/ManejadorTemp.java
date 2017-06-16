@@ -46,6 +46,8 @@ public class ManejadorTemp {
         deleteArticulo(FreeMarkerengine);
         updateArtit(FreeMarkerengine);
         IndividualShow(FreeMarkerengine);
+        signup(FreeMarkerengine);
+        addedNormal(FreeMarkerengine);
     }
     /***
      * http://localhost:4567/addUser/
@@ -63,7 +65,7 @@ public class ManejadorTemp {
         get("/addUser/", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Start Page");
+            attributes.put("Titulo", "Add Users");
           //  attributes.put("code",htmlCode);
 
             return new ModelAndView(attributes, "addUsers.ftl");
@@ -133,7 +135,7 @@ public class ManejadorTemp {
             Usuario usuario = request.session().attribute("username");
             if(usuario==null){
                 //parada del request, enviando un codigo.
-                halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+                halt(401, "No tiene permisos para acceder");
             }
         });
         get("/listArti/:id/", (request, response) -> {
@@ -144,7 +146,7 @@ public class ManejadorTemp {
             String htmlCode =  automaticHtmlCodejustOne(arti);
             String htmlCode2 =  automaticCommentHtmlCode(commentDao.getAllComments(),arti.getId());
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Agregar Nuevo Usuario");
+            attributes.put("Titulo", "List Articles");
             attributes.put("code",htmlCode);
             attributes.put("code2",htmlCode2);
             return new ModelAndView(attributes, "articulo.ftl");
@@ -160,7 +162,7 @@ public class ManejadorTemp {
         get("/login/", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Start Page");
+            attributes.put("Titulo", "Login");
             //  attributes.put("code",htmlCode);
 
             return new ModelAndView(attributes, "login.ftl");
@@ -210,7 +212,7 @@ public class ManejadorTemp {
             String id = session.id();
             session.invalidate();
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Start Page");
+            attributes.put("Titulo", "Logout");
             return new ModelAndView(attributes, "login.ftl");
         }, engine);
     }
@@ -241,16 +243,16 @@ public class ManejadorTemp {
             Usuario usuario = request.session().attribute("username");
             if(usuario==null){
                 //parada del request, enviando un codigo.
-                halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+                halt(401, "No tiene permisos para acceder");
             }
 
         });
 
         before("/addArticulo/added",(request, response) -> {
                     Usuario usuario = request.session().attribute("username");
-                    if(!usuario.isAdm() && !usuario.isAutor()){
+                    if(!usuario.isAutor()){
                         //parada del request, enviando un codigo.
-                        halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+                        halt(401, "No tiene permisos para acceder");
                     } });
         post("/addArticulo/added", (request, response) -> {
             List<Articulo> articulos = articuloDao.getAllArticulos();
@@ -295,7 +297,7 @@ public class ManejadorTemp {
             Usuario usuario = getUserByUsername(usuario_.getUsername());
             if(usuario==null){
                 //parada del request, enviando un codigo.
-                halt(401, "No tiene permisos para acceder -- Lo dice el filtro....");
+                halt(401, "No tiene permisos para acceder");
             }
         });
 
@@ -311,7 +313,7 @@ public class ManejadorTemp {
             String htmlCode =  automaticHtmlCodejustOne(articulo);
             String htmlCode2 =  automaticCommentHtmlCode(commentDao.getAllComments(),actual_id);
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Agregar Nuevo Usuario");
+            attributes.put("Titulo", "Articles");
             attributes.put("code",htmlCode);
             attributes.put("code2",htmlCode2);
             return new ModelAndView(attributes, "articulo.ftl");
@@ -363,7 +365,7 @@ public class ManejadorTemp {
         get("/actArticulo/:id/", (request, response) -> {
             Articulo articulo = getArticuloById(Long.parseLong(request.params(":id")));
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Actualizando Articulo");
+            attributes.put("Titulo", "Updating Article");
             attributes.put("articulo", articulo);
             return new ModelAndView(attributes, "updateArti.ftl");
         }, FreeMarkerengine);
@@ -396,11 +398,52 @@ public class ManejadorTemp {
             articuloDao.updateCuerpo(articulo);
 
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("Titulo", "Información de articulo");
+            attributes.put("Titulo", "Article's Information");
             attributes.put("articulo", articulo);
             return new ModelAndView(attributes, "infoArticulo.ftl");
         }, FreeMarkerengine);
     }
+    /***
+     * http://localhost:4567/singup/
+     * @param engine
+     *      */
+    public void signup(FreeMarkerEngine engine)
+    {
+        get("/signup/", (request, response) -> {
+
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("Titulo", "Signing Up");
+            //  attributes.put("code",htmlCode);
+
+            return new ModelAndView(attributes, "singUp.ftl");
+        }, engine);
+    }
+    /***
+     * http://localhost:4567/addUser/normal
+     * @param engine
+     *      */
+    public void addedNormal (FreeMarkerEngine engine)
+    {
+            post("/addUser/normal", (request, response) -> {
+                boolean adm = false;
+                boolean autor = true;
+                String username = request.queryParams("username");
+                String name = request.queryParams("nombre");
+                String password = request.queryParams("password");
+                Usuario user = new Usuario(username,name,password,adm,autor);
+                Session session=request.session(true);
+
+                session.attribute("username", user);
+
+                usuarioDao.inserIntoUsers(user);
+                String html = automaticHtmlCode(articuloDao.getAllArticulos());
+                Map<String, Object> attributes = new HashMap<>();
+                attributes.put("Titulo", "Start Page");
+                attributes.put("code",html);
+
+                return new ModelAndView(attributes, "startPage.ftl");
+            }, engine);
+        }
 
     private String automaticHtmlCode(List<Articulo> articulos) {
         String htmlCode = "";
@@ -468,18 +511,6 @@ public class ManejadorTemp {
         }
         return null;
     }
-    public Articulo getArtiByName (String titulo)
-    {
-        for (Articulo item:articuloDao.getAllArticulos()
-             ) {
-            if (item.getTitulo().equalsIgnoreCase(titulo))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
     public String automaticCommentHtmlCode (List<Comentario> item, long id_arti)
     {
 
@@ -496,7 +527,6 @@ public class ManejadorTemp {
         }
         }
     return htmlCode;}
-
     private String automaticHtmlCodeForTable(List<Articulo> articulos) {
         String htmlCode = "";
         for (Articulo item : articulos) {
@@ -513,8 +543,6 @@ public class ManejadorTemp {
 
         return htmlCode;
     }
-
-
 }
 
 
