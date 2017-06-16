@@ -42,7 +42,6 @@
             <h4>Spark Blog</h4>
             <ul class="nav nav-pills nav-stacked">
                 <li><a href="/startPage/">Home</a></li>
-                <li><a href="/startPage/">Home</a></li>
                 <li class="active"><a href="/addUser/">Add User</a></li>
                 <li><a href="/login/">Login</a></li>
                 <li><a href="/invalidarSesion/">Logout</a></li>

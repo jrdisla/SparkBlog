@@ -10,5 +10,14 @@
       <user-name>sa</user-name>
       <introspection-schemas>TEST:PUBLIC</introspection-schemas>
     </data-source>
+    <data-source name="test7" uuid="feb46873-020f-4dc7-a893-89fe6724a0bb">
+      <database-info product="H2" version="1.4.192 (2016-05-26)" jdbc-version="4.0" driver-name="H2 JDBC Driver" driver-version="1.4.192 (2016-05-26)">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>sa</user-name>
+      <introspection-schemas>TEST7:PUBLIC</introspection-schemas>
+    </data-source>
   </component>
 </project>

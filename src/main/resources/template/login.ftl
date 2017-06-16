@@ -14,8 +14,9 @@
     <div class="panel-heading">${Titulo}</div>
     <div class="panel-body">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="/addUsers/">Add User</a></li>
+            <li class="active"><a href="/addUsers/">Login</a></li>
             <li><a href="/signup/">Sing up</a></li>
+            <li><a href="/startPage/">Home</a></li>
 
         </ul>
         <form action="/login/logged" method="post">
